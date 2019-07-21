@@ -7,4 +7,4 @@ alias ls="ls --color=auto"
 alias nr="service nginx restart"
 
 alias ports="netstat -tulanp | grep LISTEN"
-alias service="systemctl list-unit-files | egrep '^httpd\.|^apache2\.|^nginx\.|mariadb'"
+alias service="systemctl list-unit-files | egrep '^httpd\.|^apache2\.|^nginx\.|mariadb|mysqld'"
