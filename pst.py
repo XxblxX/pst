@@ -10,7 +10,7 @@ def ssh_i():
     sshpass = ('sshpass -p {2} ssh -oStrictHostKeyChecking=no {1}@{0} -t bash'.format(ip, user, password))
     sh = pexpect.spawn(sshpass, encoding='utf-8', echo=False)
     sh.setwinsize(400,400)
-    sh.sendline('source <(curl -s0 curl -s0 https://raw.githubusercontent.com/XxblxX/.bashrc/master/.bashrc)')
+    sh.sendline('source <(curl -s0 curl -s0 https://raw.githubusercontent.com/XxblxX/pst/master/.bashrc')
     sh.sendline('clear; history -c')
     sh.setecho(True)
     sh.interact()
