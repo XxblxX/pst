@@ -1,30 +1,35 @@
 #!/usr/bin/env python3
 
-import sys
-import subprocess
-import re
-import os
-import pexpect
+import pexpect, struct, fcntl, termios, signal, sys
 
-def ssh_i():
-    sshpass = ('sshpass -p {2} ssh -oStrictHostKeyChecking=no {1}@{0} -t bash'.format(ip, user, password))
-    sh = pexpect.spawn(sshpass, encoding='utf-8', echo=False)
-#    sh.setwinsize(400,400)
-    sh.sendline('source <(curl -s0 curl -s0 https://raw.githubusercontent.com/XxblxX/pst/master/.bashrc)')
-    sh.sendline('clear; history -c')
-    sh.setecho(True)
-    sh.interact()
+def get_terminal_size():
+    s = struct.pack("HHHH", 0, 0, 0, 0)
+    a = struct.unpack('hhhh', fcntl.ioctl(sys.stdout.fileno(), termios.TIOCGWINSZ, s))
+    return a[0], a[1]
+
+def sigwinch_passthrough(sig, data):
+    global p
+    p.setwinsize(*get_terminal_size())
 
 try:
-    ip = sys.argv[1]
-    user = "root"
-    password = sys.argv[2]
-    alias = 'alias nr="service nginx restart"'
-    
+
     if __name__ == "__main__":
-        ssh_i()
+        ip = sys.argv[1]
+        user = "root"
+        password = sys.argv[2] 
+        sshpass = ('sshpass -p {2} ssh -oStrictHostKeyChecking=no {1}@{0} -t bash'.format(ip, user, password))
+
+        p = pexpect.spawn(sshpass, encoding='utf-8', echo=False)
+        p.setwinsize(*get_terminal_size())
+        signal.signal(signal.SIGWINCH, sigwinch_passthrough)
+        p.sendline('source <(curl -s0 curl -s0 https://raw.githubusercontent.com/XxblxX/pst/master/.bashrc)')
+
+        p.sendline('clear; history -c')
+        p.setecho(True)
+        p.interact()
 
 except IndexError:
     pass
 except ValueError:
     pass
+
