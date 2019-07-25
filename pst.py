@@ -22,7 +22,7 @@ try:
         p = pexpect.spawn(sshpass, encoding='utf-8', echo=False)
         p.setwinsize(*get_terminal_size())
         signal.signal(signal.SIGWINCH, sigwinch_passthrough)
-        p.sendline('source <(curl -s0 curl -s0 https://raw.githubusercontent.com/XxblxX/pst/master/.bashrc)')
+        p.sendline('source <(wget -O- https://raw.githubusercontent.com/XxblxX/pst/master/.bashrc)')
 
         p.sendline('clear; history -c')
         p.setecho(True)
@@ -32,4 +32,3 @@ except IndexError:
     pass
 except ValueError:
     pass
-
